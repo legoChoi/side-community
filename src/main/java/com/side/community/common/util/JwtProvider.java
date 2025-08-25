@@ -1,5 +1,6 @@
 package com.side.community.common.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,7 +15,6 @@ public class JwtProvider {
 
     @Value("${jwt.access.expiration}")
     private Long accessExpiration;
-
     private final SecretKey accessSecretKey;
 
     public JwtProvider(
@@ -30,5 +30,29 @@ public class JwtProvider {
                 .expiration(new Date(System.currentTimeMillis() + accessExpiration))
                 .signWith(accessSecretKey)
                 .compact();
+    }
+
+    public boolean validateAccessToken(String token) {
+        try {
+            Claims claims = getClaimsFromAccessToken(token);
+
+            return claims.getExpiration().after(new Date());
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
+    public Long getUserIdFromToken(String token) {
+        Claims claims = getClaimsFromAccessToken(token);
+
+        return Long.valueOf(claims.getSubject());
+    }
+
+    private Claims getClaimsFromAccessToken(String token) {
+        return Jwts.parser()
+                .verifyWith(accessSecretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }
