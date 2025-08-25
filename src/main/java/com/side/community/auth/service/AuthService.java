@@ -3,7 +3,7 @@ package com.side.community.auth.service;
 import com.side.community.auth.dto.request.AuthSignupRequestDto;
 import com.side.community.auth.dto.response.AuthSignupResponseDto;
 import com.side.community.common.exception.CustomRuntimeException;
-import com.side.community.common.exception.ExceptionType;
+import com.side.community.common.exception.type.AuthExceptionType;
 import com.side.community.common.util.JwtProvider;
 import com.side.community.user.entity.User;
 import com.side.community.user.repository.UserJpaRepository;
@@ -23,12 +23,12 @@ public class AuthService {
 
     @Transactional
     public AuthSignupResponseDto signup(AuthSignupRequestDto dto) {
-        if (!userJpaRepository.existsByAccountId(dto.accountId())) {
-            throw new CustomRuntimeException(ExceptionType.DUPLICATED_ACCOUNT_ID);
+        if (userJpaRepository.existsByAccountId(dto.accountId())) {
+            throw new CustomRuntimeException(AuthExceptionType.DUPLICATED_ACCOUNT_ID);
         }
 
-        if (!userJpaRepository.existsByNickname(dto.nickname())) {
-            throw new CustomRuntimeException(ExceptionType.DUPLICATED_NICKNAME);
+        if (userJpaRepository.existsByNickname(dto.nickname())) {
+            throw new CustomRuntimeException(AuthExceptionType.DUPLICATED_NICKNAME);
         }
 
         String encodedPassword = passwordEncoder.encode(dto.accountPassword());
