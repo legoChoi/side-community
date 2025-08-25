@@ -1,26 +1,26 @@
-package com.side.community.common.exception;
+package com.side.community.common.exception.type;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-@Getter
 @RequiredArgsConstructor
-public enum ExceptionType {
+public enum AuthExceptionType implements ExceptionType {
 
-    // AUTH
     DUPLICATED_ACCOUNT_ID(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다."),
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT,"이미 존재하는 닉네임입니다."),
-
-    // USER
-
-    // POST
-
-    // COMMENT
-
-    ;
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
 
     private final HttpStatus status;
     private final String message;
 
+
+    @Override
+    public HttpStatus getHttpStatus() {
+        return this.status;
+    }
+
+    @Override
+    public String getMessage() {
+        return this.message;
+    }
 }
