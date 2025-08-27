@@ -1,6 +1,8 @@
 package com.side.community.auth.service;
 
+import com.side.community.auth.dto.request.AuthSigninRequestDto;
 import com.side.community.auth.dto.request.AuthSignupRequestDto;
+import com.side.community.auth.dto.response.AuthSigninResponseDto;
 import com.side.community.auth.dto.response.AuthSignupResponseDto;
 import com.side.community.common.exception.CustomRuntimeException;
 import com.side.community.common.exception.type.AuthExceptionType;
@@ -43,6 +45,19 @@ public class AuthService {
 
         String accessToken = jwtProvider.generateAccessToken(user.getId());
 
-        return new AuthSignupResponseDto(accessToken);
+        return AuthSignupResponseDto.from(accessToken);
+    }
+
+    public AuthSigninResponseDto signin(AuthSigninRequestDto dto) {
+        User user = userJpaRepository.findByAccountId(dto.accountId())
+                .orElseThrow(() -> new CustomRuntimeException(AuthExceptionType.INVALID_CREDENTIALS));
+
+        if (!passwordEncoder.matches(dto.accountPassword(), user.getAccountPassword())) {
+            throw new CustomRuntimeException(AuthExceptionType.INVALID_CREDENTIALS);
+        }
+
+        String accessToken = jwtProvider.generateAccessToken(user.getId());
+
+        return AuthSigninResponseDto.from(accessToken);
     }
 }
