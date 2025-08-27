@@ -17,7 +17,7 @@ public class FilterConfig {
     public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilter() {
         FilterRegistrationBean<JwtAuthenticationFilter> bean = new FilterRegistrationBean<>();
         bean.setFilter(new JwtAuthenticationFilter(jwtProvider));
-        bean.addUrlPatterns("/*"); // 필요 시 패턴 설정
+        bean.addUrlPatterns("/*");
         return bean;
     }
 }

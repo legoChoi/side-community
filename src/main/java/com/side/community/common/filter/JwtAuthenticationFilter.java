@@ -1,5 +1,7 @@
 package com.side.community.common.filter;
 
+import com.side.community.common.constants.HeaderConstants;
+import com.side.community.common.constants.RequestAttributeConstants;
 import com.side.community.common.exception.CustomRuntimeException;
 import com.side.community.common.exception.type.AuthExceptionType;
 import com.side.community.common.util.JwtProvider;
@@ -21,9 +23,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    private final String AUTHORIZATION_HEADER = "Authorization";
-    private final String BEARER_PREFIX = "Bearer ";
 
     private final JwtProvider jwtProvider;
 
@@ -49,6 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throw new CustomRuntimeException(AuthExceptionType.INVALID_TOKEN);
         }
 
+        Long userId = jwtProvider.getUserIdFromToken(token);
+        request.setAttribute(RequestAttributeConstants.ATTRIBUTE_USER_ID, userId);
+
         filterChain.doFilter(request, response);
     }
 
@@ -60,13 +62,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String extractToken(HttpServletRequest request) {
-        String header = request.getHeader(AUTHORIZATION_HEADER);
+        String header = request.getHeader(HeaderConstants.AUTHORIZATION_HEADER);
 
-        if (StringUtils.hasText(header) && header.startsWith(BEARER_PREFIX)) {
-            return header.substring(BEARER_PREFIX.length());
+        if (StringUtils.hasText(header) && header.startsWith(HeaderConstants.BEARER_PREFIX)) {
+            return header.substring(HeaderConstants.BEARER_PREFIX.length());
         }
 
         return null;
-
     }
 }
