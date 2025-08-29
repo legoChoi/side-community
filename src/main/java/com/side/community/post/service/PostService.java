@@ -1,6 +1,9 @@
 package com.side.community.post.service;
 
+import com.side.community.category.entity.Category;
+import com.side.community.category.repository.CategoryJpaRepository;
 import com.side.community.common.exception.CustomRuntimeException;
+import com.side.community.common.exception.type.CategoryExceptionType;
 import com.side.community.common.exception.type.PostExceptionType;
 import com.side.community.post.dto.request.PostCreateRequestDto;
 import com.side.community.post.dto.request.PostUpdateRequestDto;
@@ -18,9 +21,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
 
     private final PostJpaRepository postJpaRepository;
+    private final CategoryJpaRepository categoryJpaRepository;
 
-    public PostCreateResponseDto createPost(PostCreateRequestDto request, User user) {
-        Post post = new Post(request.title(), request.content(), user);
+    public PostCreateResponseDto createPost(PostCreateRequestDto dto, User user) {
+        Category category = findCategoryById(dto.categoryId());
+
+        Post post = Post.builder()
+                .user(user)
+                .category(category)
+                .title(dto.title())
+                .content(dto.content())
+                .build();
+
         postJpaRepository.save(post);
 
         return PostCreateResponseDto.from(post);
@@ -57,5 +69,10 @@ public class PostService {
     private Post findPostById(Long postId) {
         return postJpaRepository.findById(postId)
                 .orElseThrow(() -> new CustomRuntimeException(PostExceptionType.POST_NOT_FOUND));
+    }
+
+    private Category findCategoryById(Long categoryId) {
+        return categoryJpaRepository.findById(categoryId)
+                .orElseThrow(() -> new CustomRuntimeException(CategoryExceptionType.CATEGORY_NOT_FOUND));
     }
 }
