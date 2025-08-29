@@ -8,6 +8,7 @@ import com.side.community.common.exception.type.PostExceptionType;
 import com.side.community.post.dto.request.PostCreateRequestDto;
 import com.side.community.post.dto.request.PostUpdateRequestDto;
 import com.side.community.post.dto.response.PostCreateResponseDto;
+import com.side.community.post.dto.response.PostFindResponseDto;
 import com.side.community.post.dto.response.PostUpdateResponseDto;
 import com.side.community.post.entity.Post;
 import com.side.community.post.repository.PostJpaRepository;
@@ -36,6 +37,11 @@ public class PostService {
         postJpaRepository.save(post);
 
         return PostCreateResponseDto.from(post);
+    }
+
+    public PostFindResponseDto findPost(Long postId) {
+        return postJpaRepository.findPostWithProjection(postId)
+                .orElseThrow(() -> new CustomRuntimeException(PostExceptionType.POST_NOT_FOUND));
     }
 
     @Transactional

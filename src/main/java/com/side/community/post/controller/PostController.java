@@ -4,6 +4,7 @@ import com.side.community.common.annotation.UserPrincipal;
 import com.side.community.post.dto.request.PostCreateRequestDto;
 import com.side.community.post.dto.request.PostUpdateRequestDto;
 import com.side.community.post.dto.response.PostCreateResponseDto;
+import com.side.community.post.dto.response.PostFindResponseDto;
 import com.side.community.post.dto.response.PostUpdateResponseDto;
 import com.side.community.post.service.PostService;
 import com.side.community.user.entity.User;
@@ -30,8 +31,18 @@ public class PostController {
                 .body(data);
     }
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostFindResponseDto> findPost(
+            @PathVariable Long postId
+    ) {
+        PostFindResponseDto data = postService.findPost(postId);
+
+        return ResponseEntity.ok()
+                .body(data);
+    }
+
     @PatchMapping("/{postId}")
-    public ResponseEntity<PostUpdateResponseDto> findPost(
+    public ResponseEntity<PostUpdateResponseDto> updatePost(
             @PathVariable Long postId,
             @RequestBody PostUpdateRequestDto postUpdateRequestDto,
             @UserPrincipal User user
