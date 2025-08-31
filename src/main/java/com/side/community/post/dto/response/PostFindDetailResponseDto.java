@@ -1,13 +1,14 @@
 package com.side.community.post.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.querydsl.core.annotations.QueryProjection;
 import com.side.community.post.entity.Post;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Builder
-public record PostFindResponseDto(
+public record PostFindDetailResponseDto(
         Long postId,
 
         Long userId,
@@ -29,8 +30,12 @@ public record PostFindResponseDto(
         LocalDateTime updatedAt
 ) {
 
-    public static PostFindResponseDto from(Post post) {
-        return PostFindResponseDto.builder()
+    @QueryProjection
+    public PostFindDetailResponseDto {
+    }
+
+    public static PostFindDetailResponseDto from(Post post) {
+        return PostFindDetailResponseDto.builder()
                 .postId(post.getId())
                 .userId(post.getUser().getId())
                 .userNickname(post.getUser().getNickname())

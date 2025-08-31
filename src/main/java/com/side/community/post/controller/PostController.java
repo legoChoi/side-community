@@ -4,8 +4,8 @@ import com.side.community.common.annotation.UserPrincipal;
 import com.side.community.post.dto.request.PostCreateRequestDto;
 import com.side.community.post.dto.request.PostUpdateRequestDto;
 import com.side.community.post.dto.response.PostCreateResponseDto;
-import com.side.community.post.dto.response.PostFindPageResponseDto;
-import com.side.community.post.dto.response.PostFindResponseDto;
+import com.side.community.post.dto.response.PostFindDetailResponseDto;
+import com.side.community.post.dto.response.PostFindInfoPageResponseDto;
 import com.side.community.post.dto.response.PostUpdateResponseDto;
 import com.side.community.post.service.PostService;
 import com.side.community.user.entity.User;
@@ -35,22 +35,22 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostFindResponseDto> findPost(
+    public ResponseEntity<PostFindDetailResponseDto> getPostDetail(
             @PathVariable Long postId
     ) {
-        PostFindResponseDto data = postService.findPost(postId);
+        PostFindDetailResponseDto data = postService.findPostDetail(postId);
 
         return ResponseEntity.ok()
                 .body(data);
     }
 
     @GetMapping
-    public ResponseEntity<PostFindPageResponseDto> findPostPage(
+    public ResponseEntity<PostFindInfoPageResponseDto> getPostInfos(
             @PageableDefault Pageable pageable,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String content
     ) {
-        PostFindPageResponseDto data = postService.findPostPage(pageable, title, content);
+        PostFindInfoPageResponseDto data = postService.findPostInfoPage(pageable, title, content);
 
         return ResponseEntity.ok()
                 .body(data);

@@ -39,14 +39,14 @@ public class PostService {
         return PostCreateResponseDto.from(post);
     }
 
-    public PostFindResponseDto findPost(Long postId) {
-        return postJpaRepository.findPostWithProjection(postId)
+    public PostFindDetailResponseDto findPostDetail(Long postId) {
+        return postJpaRepository.findPostDetailById(postId)
                 .orElseThrow(() -> new CustomRuntimeException(PostExceptionType.POST_NOT_FOUND));
     }
 
-    public PostFindPageResponseDto findPostPage(Pageable pageable, String title, String content) {
-        Page<PostInfoResponseDto> data = postJpaRepository.findPageWithConditions(pageable, title, content);
-        return PostFindPageResponseDto.from(data);
+    public PostFindInfoPageResponseDto findPostInfoPage(Pageable pageable, String title, String content) {
+        Page<PostFindInfoResponseDto> data = postJpaRepository.findPostInfoPageByConditions(pageable, title, content);
+        return PostFindInfoPageResponseDto.from(data);
     }
 
     @Transactional

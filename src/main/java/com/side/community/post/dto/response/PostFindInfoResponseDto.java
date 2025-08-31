@@ -5,7 +5,7 @@ import com.querydsl.core.annotations.QueryProjection;
 
 import java.time.LocalDateTime;
 
-public record PostInfoResponseDto(
+public record PostFindInfoResponseDto(
         Long postId,
 
         Long userId,
@@ -23,6 +23,6 @@ public record PostInfoResponseDto(
 ) {
 
     @QueryProjection
-    public PostInfoResponseDto {
+    public PostFindInfoResponseDto {
     }
 }

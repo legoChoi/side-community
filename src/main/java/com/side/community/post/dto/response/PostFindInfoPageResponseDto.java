@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 @Builder
-public record PostFindPageResponseDto(
+public record PostFindInfoPageResponseDto(
         int pageNumber,
 
         int pageSize,
@@ -19,11 +19,11 @@ public record PostFindPageResponseDto(
 
         boolean last,
 
-        List<PostInfoResponseDto> data
+        List<PostFindInfoResponseDto> data
 ) {
 
-    public static PostFindPageResponseDto from(Page<PostInfoResponseDto> page) {
-        return PostFindPageResponseDto.builder()
+    public static PostFindInfoPageResponseDto from(Page<PostFindInfoResponseDto> page) {
+        return PostFindInfoPageResponseDto.builder()
                 .pageNumber(page.getNumber())
                 .pageSize(page.getSize())
                 .totalElements(page.getTotalElements())
