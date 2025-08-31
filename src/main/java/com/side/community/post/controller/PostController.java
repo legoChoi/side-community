@@ -4,12 +4,15 @@ import com.side.community.common.annotation.UserPrincipal;
 import com.side.community.post.dto.request.PostCreateRequestDto;
 import com.side.community.post.dto.request.PostUpdateRequestDto;
 import com.side.community.post.dto.response.PostCreateResponseDto;
+import com.side.community.post.dto.response.PostFindPageResponseDto;
 import com.side.community.post.dto.response.PostFindResponseDto;
 import com.side.community.post.dto.response.PostUpdateResponseDto;
 import com.side.community.post.service.PostService;
 import com.side.community.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +39,18 @@ public class PostController {
             @PathVariable Long postId
     ) {
         PostFindResponseDto data = postService.findPost(postId);
+
+        return ResponseEntity.ok()
+                .body(data);
+    }
+
+    @GetMapping
+    public ResponseEntity<PostFindPageResponseDto> findPostPage(
+            @PageableDefault Pageable pageable,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String content
+    ) {
+        PostFindPageResponseDto data = postService.findPostPage(pageable, title, content);
 
         return ResponseEntity.ok()
                 .body(data);
