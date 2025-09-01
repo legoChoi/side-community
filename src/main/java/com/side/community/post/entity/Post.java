@@ -22,11 +22,11 @@ public class Post extends BaseEntity {
     @Column(name = "post_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
@@ -36,12 +36,16 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    private PostType postType;
+
     @Builder
-    public Post(String title, String content, User user, Category category) {
-        this.title = title;
-        this.content = content;
+    public Post(User user, Category category, String title, String content, PostType postType) {
         this.user = user;
         this.category = category;
+        this.title = title;
+        this.content = content;
+        this.postType = postType;
     }
 
     public void update(PostUpdateRequestDto dto) {

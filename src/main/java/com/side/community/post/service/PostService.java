@@ -9,6 +9,7 @@ import com.side.community.post.dto.request.PostCreateRequestDto;
 import com.side.community.post.dto.request.PostUpdateRequestDto;
 import com.side.community.post.dto.response.*;
 import com.side.community.post.entity.Post;
+import com.side.community.post.entity.PostType;
 import com.side.community.post.repository.PostJpaRepository;
 import com.side.community.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class PostService {
                 .category(category)
                 .title(dto.title())
                 .content(dto.content())
+                .postType(PostType.NORMAL)
                 .build();
 
         postJpaRepository.save(post);
